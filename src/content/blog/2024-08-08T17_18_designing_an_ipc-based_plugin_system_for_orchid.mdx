@@ -1,0 +1,44 @@
+---
+title: Designing an IPC-based plugin system for Orchid
+author: lbfalvy
+tags: [programming, orchid]
+pubDate: 2024-08-08T17:18Z[UTC]
+summary: My plans for modularizing a programming language
+unlisted: false
+---
+## The story so far
+
+Orchid is an experimental programming language I've been building for about 2 years. During that time I learned a lot about Rust, language development, project management and my own pace of work. I wrote three articles on this blog detailing various aspects of the project. All of them are now dated and some are laughably ambitious (my plans for a type system for example will take another 2 years to even begin to materialize) but I'll keep them up for posterity.
+
+Right now, Orchid is an interpreted, lazy, functional programming language that supports language extensions written in Rust. It supports plug-ins that are defined in Rust and can extend the lexer, parser, and define additional types and operations. Expression-level syntax is also extensible via macros which require no native code. Plugins are standalone executables which communicate with the interpreter through message passing IPC.
+
+## Architecture
+
+Every part of my ecosystem is written in Rust, so I elected to define the protocol in Rust too. With the help of a derive macro I can define my messages as structs which also act as the deserialized message objects in messaging code. My hope is that this definition is parseable by other languages, but this isn't an immediate priority.
+
+The messaging protocol defines requests and notifications. For now it uses standard IO, but it's very likely that this will not be fast enough on the long run, so most of the ecosystem is protocol agnostic. One dependency I could not figure out how to avoid was threading; unfortunately this means that porting Orchid to Webassembly would be a nightmare, but I hope that either wasm threading support or Rust's wasm support improves by the time I get there.
+
+The interpreter's most important extension mechanism is an Atom. Atoms are opaque values that carry a buffer of data, an optional ID, and the plugin that created them. When an atom is applied as a function, returned as the value of the program, or destroyed, the plugin is contacted via IPC to decide what should happen next. Plugins can also use the atoms as anchors to send messages to each other. The result is that at runtime the interpreter takes the role of an "object broker" that connects handles to objects in external programs according to the program.
+
+## Lexer and parser plug-ins
+
+In an effort to make Orchid as customizable as the plugin authors need, there are hooks defined in the protocol which allow the plug-ins to subscribe to two specific events.
+
+1. A specific character is encountered in source text
+2. A specific word is encountered at the start of a line
+
+Lexer plugins, like the lexer itself, convert source code into syntax primitives; names, parenthesized subsections, lambda functions and atoms. The fact that lambda functions are already present at this point is a choice of convenience with regard to parser design, in practice, lexers mostly produce atoms and simple expressions involving them. These also have the opportunity to recursively call back to the lexer via IPC, which enables such things as JS-style perfectly recursive string interpolation.
+
+Parser plugins on the other hand define new categories of static items; their output is a subtree of modules, macro rules, and constants. This tree is static knowledge so reflection on it is a pure value-based operation, so the parser extensions define similarly static things; the standard library uses these for types and elixir-style protocols.
+
+## Macros
+
+Between character-level lexers and item-level static parsers, the expression level is addressed with a dramatically different mechanism; hygienic S-expression substitution rules. These are blissfully simple for easy tasks like defining an infix operator or a pipeline operator, and they can tackle many computational tasks such as list transforms with ease and style.
+
+The standard library uses them to define constructor syntax for containers, procedural-style statement lists, and to establish an extensible pattern matching protocol that usercode can hook into to define its own custom patterns. The macro system allows Orchid to retain the metaprogramming power of Lisp while approaching the syntactic minimalism of Haskell.
+
+## Tooling
+
+I'm an avid text editor user, and unobtrusive dev tooling is close to my heart, so Orchid already has a language server, which calls the interpreter for analysis to ensure that all future plugins will be implicitly supported. My intention is to develop a test runner and formatter early on as well, as these also greatly contribute to developer experience. These are pretty mission-agnostic tools that are plain useful regardless of architecture.
+
+Before all that however, it is essential that I develop some kind of package manager.

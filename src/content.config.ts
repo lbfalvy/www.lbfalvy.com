@@ -1,5 +1,7 @@
+import { Temporal } from '@js-temporal/polyfill';
 import { glob } from 'astro/loaders';
 import { defineCollection, z } from 'astro:content';
+import { isValidTime } from './utils/time';
 
 const blog = defineCollection({
 	// Load Markdown and MDX files in the `src/content/blog/` directory.
@@ -7,11 +9,14 @@ const blog = defineCollection({
 	// Type-check frontmatter using a schema
 	schema: z.object({
 		title: z.string(),
-		description: z.string(),
-		// Transform string to Date object
-		pubDate: z.coerce.date(),
-		updatedDate: z.coerce.date().optional(),
-		heroImage: z.string().optional(),
+		summary: z.string(),
+		image: z.string().optional(),
+		// Transform string to ZonedDateTime object
+		pubDate: z.string().refine(isValidTime),
+		updatedDate: z.string().refine(isValidTime).optional(),
+		unlisted: z.boolean().optional(),
+		author: z.string(),
+		tags: z.array(z.string())
 	}),
 });
 
