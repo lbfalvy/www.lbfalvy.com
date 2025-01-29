@@ -19,9 +19,7 @@ In synchronous rust, `Iterator::map` takes an `FnMut`, a function which can only
     fn map<B, F>(self, f: F) -> Map<Self, F> where F: FnMut(Self::Item) -> B;
   }
   ```
-  <p slot="label">
-    source (modified): https://doc.rust-lang.org/src/core/iter/traits/iterator.rs.html#745
-  </p>
+  <p slot="label">source (modified): https://doc.rust-lang.org/src/core/iter/traits/iterator.rs.html#745</p>
 </Graphic>
 
 The async equivalent however has to take a function that returns some type that implements `Future` because that's how you statically type an asynchronous function, you parameterize on the state machine the compiler will eventually generate for its paused data. This is again perfectly normal, C++ coroutines do the same as I'm pretty sure every other language that supports any kind of stack-allocated coroutine has to. The problem emerges from lifetimes, because in order for that Future to hold onto a mutable reference, the async equivalent of map (which happens to be called `StreamExt::then` for reference) has to not only guarantee that the callback will not be running when its next called, but that its return value (the `Future` instance) will not exist (either because it's finished or because it's been freed) by the time the function is called again.
@@ -39,9 +37,7 @@ The async equivalent however has to take a function that returns some type that 
       Fut: Future;
   }
   ```
-  <p slot="label">
-    source (modified): https://docs.rs/futures-util/0.3.31/src/futures_util/stream/stream/mod.rs.html#488
-  </p>
+  <p slot="label">source (modified): https://docs.rs/futures-util/0.3.31/src/futures_util/stream/stream/mod.rs.html#488</p>
 </Graphic>
 
 The type of the callback then _should be_ **some function which for any lifetime `'a` returns some type is valid for the same lifetime `'a`**. The type of the return value is parametric! 
@@ -97,9 +93,7 @@ Actually, this kind of contract isn't inherently impossible to represent in Rust
     fn async_call_mut(&mut self, args: Args) -> Self::CallRefFuture<'_>;
   }
   ```
-  <p slot="label">
-    FnMut from the standard library and AsyncFnMut from the RFC, edited for brevity.
-  </p>
+  <p slot="label">FnMut from the standard library and AsyncFnMut from the RFC, edited for brevity.</p>
 </Graphic>
 
 As a reminder, in ref and mut member functions `'_` always refers to the self argument's lifetime, so The lifetime bound on `async_call_mut` basically declares that once it's called, its output is valid for as long as the function is in scope, and the function may not be called again until the return value is freed because for as long as it's live, so is the mutable borrow. Perfect!
