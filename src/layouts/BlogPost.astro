@@ -2,6 +2,8 @@
 import type { CollectionEntry } from 'astro:content';
 import Main from './Main.astro';
 import Time from '../components/Time.svelte';
+import { Image } from 'astro:assets';
+import patreonWordmark from "../icons/PATREON_WORDMARK_1_WHITE_RGB.svg"
 
 type Props = CollectionEntry<'blog'>['data'];
 
@@ -20,5 +22,22 @@ const { title, author, summary, pubDate, updatedDate, image } = Astro.props;
 		<main class="max-w-[100ch] font-prose post-content">
 			<slot />
 		</main>
+		<footer class="mt-20">
+			<p class="post-meta">
+				Don't fund me if you have more important expenses.
+				I will spend all the extra free time on silly experiments.
+				<br>
+				<a href='https://ko-fi.com/D1D4AFWZX' target='_blank'>
+					<img class="inline-block border-0 h-[24px]"
+						src='https://storage.ko-fi.com/cdn/kofi1.png?v=6'
+						alt='Buy Me a Coffee at ko-fi.com' />
+				</a>
+				<a href="https://patreon.com/lbfalvy?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink">
+					<Image class="inline-block border-0 h-[16px] -mx-[200px]"
+						src={patreonWordmark}
+						alt="Support me on Patreon" />
+				</a>
+			</p>
+		</footer>
 	</article>
 </Main>
