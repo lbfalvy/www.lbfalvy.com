@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
   import { parseTime, printTime } from "../utils/time";
+  import Time from "./Time.svelte";
 
   interface Props {
     posts: CollectionEntry<"blog">[];
@@ -69,11 +70,9 @@
             <address class="inline-block post-meta col-start-2 md:ml-3">
               {post.data.author}
             </address>
-            <time class="inline-block post-meta col-start-3 lg:ml-1"
-              datetime={parseTime(post.data.pubDate).toString()}
-            >
-              {printTime(parseTime(post.data.pubDate))}
-            </time>
+            <div class="inline-block post-meta col-start-3 lg:ml-1">
+              <Time time={parseTime(post.data.pubDate)} />
+            </div>
             <div class="col-span-3">{post.data.summary}</div>
           </div>
         </a>

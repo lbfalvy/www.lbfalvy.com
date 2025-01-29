@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import Main from './Main.astro';
 import { parseTime, printTime } from '../utils/time';
+import Time from '../components/Time.svelte';
 
 type Props = CollectionEntry<'blog'>['data'];
 
@@ -12,12 +13,10 @@ const { title, author, summary, pubDate, updatedDate } = Astro.props;
 		<header class="lg:grid grid-cols-[auto_auto_minmax(300px,_1fr)] grid-rows-[auto_auto]">
 			<h2 class="font-bold row-span-2 text-2xl m-2 mt-3">{title}</h2>
 			<address class="post-meta inline-block col-start-2">{author}</address>
-			<time datetime={parseTime(pubDate).toString()}
-				class="post-meta inline-block col-start-3"
-			>{printTime(parseTime(pubDate))}</time>
+			<Time time={parseTime(pubDate)} />
 			<div class="italic tracking-[3px] text-emph-fg col-start-2 col-span-2 m-2 mt-0">{summary}</div>
 			{updatedDate && <div>
-				Amended <time datetime={parseTime(updatedDate).toString()}>{printTime(parseTime(updatedDate))}</time>
+				Amended <Time time={parseTime(updatedDate)} />
 			</div>}
 		</header>
 		<hr class="mb-3">
