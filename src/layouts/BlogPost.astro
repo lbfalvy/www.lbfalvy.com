@@ -1,14 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Main from './Main.astro';
-import { parseTime, printTime } from '../utils/time';
 import Time from '../components/Time.svelte';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, author, summary, pubDate, updatedDate } = Astro.props;
+const { title, author, summary, pubDate, updatedDate, image } = Astro.props;
 ---
-<Main title={title} description={summary}>
+<Main title={title} description={summary} image={image}>
 	<article class="m-5 mt-3">
 		<header class="lg:grid grid-cols-[auto_auto_minmax(300px,_1fr)] grid-rows-[auto_auto]">
 			<h2 class="font-bold row-span-2 text-2xl m-2 mt-3">{title}</h2>
