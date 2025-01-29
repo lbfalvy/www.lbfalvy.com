@@ -13,7 +13,7 @@ const { title, author, summary, pubDate, updatedDate } = Astro.props;
 		<header class="lg:grid grid-cols-[auto_auto_minmax(300px,_1fr)] grid-rows-[auto_auto]">
 			<h2 class="font-bold row-span-2 text-2xl m-2 mt-3">{title}</h2>
 			<address class="post-meta inline-block col-start-2">{author}</address>
-			<Time time={parseTime(pubDate)} />
+			<Time client:load time={parseTime(pubDate)} />
 			<div class="italic tracking-[3px] text-emph-fg col-start-2 col-span-2 m-2 mt-0">{summary}</div>
 			{updatedDate && <div>
 				Amended <Time time={parseTime(updatedDate)} />
