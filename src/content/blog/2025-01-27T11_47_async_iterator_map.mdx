@@ -4,11 +4,12 @@ author: lbfalvy
 tags: [programming, rust, langdev]
 pubDate: 2025-01-29T11:27Z[UTC]
 summary: On the state of async Rust, limitations of the type system, and Iterator::map
+image: https://assets-for-gh-pages.gb-lon-1.linodeobjects.com/Screenshot%202025-01-29%20170323.png
 unlisted: false
 ---
 import Graphic from "../../components/Graphic.astro"
 
-The async equivalent to iterators are streams, which are exactly the same as AsyncIterators in JS or C#; the consumer pulls on the stream but the stream is allowed to defer responding, so both sides must be able to pause. Simple stuff.
+The async equivalent to iterators in Rust are streams, which are exactly the same as AsyncIterators in JS or C#; the consumer pulls on the stream but the stream is allowed to defer responding, so both sides must be able to pause. Simple stuff.
 
 In synchronous rust, `Iterator::map` takes an `FnMut`, a function which can only be called if you can prove that it's not already running. This is good because it's pretty common to want to either use mutable context for a transformation or equivalently perform a sequence of effectful operations and then collect their results into a datastructure, and both of these are obviously expressed as `sequence.map(|item| /* some mutation */).collect()` which as a bonus propagates size hints. The Orchid codebase is FULL of this pattern.
 
