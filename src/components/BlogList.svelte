@@ -71,7 +71,7 @@
               {post.data.author}
             </address>
             <div class="inline-block post-meta col-start-3 lg:ml-1">
-              <Time time={parseTime(post.data.pubDate)} />
+              <Time datetime={post.data.pubDate} />
             </div>
             <div class="col-span-3">{post.data.summary}</div>
           </div>

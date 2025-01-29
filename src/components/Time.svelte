@@ -1,12 +1,13 @@
 <script lang="ts">
 import type { Temporal } from "@js-temporal/polyfill";
-import { printTime } from "../utils/time";
+import { parseTime, printTime } from "../utils/time";
 
 interface Props {
-  time: Temporal.ZonedDateTime
+  datetime: string
 }
 
-const { time }: Props = $props();
+const { datetime }: Props = $props();
+const time = $derived(parseTime(datetime));
 </script>
 
 <time datetime={time.toString()} class="post-meta inline-block col-start-3">
