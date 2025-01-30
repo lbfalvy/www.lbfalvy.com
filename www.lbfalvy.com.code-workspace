@@ -21,7 +21,8 @@
 	},
 	"extensions": {
 		"recommendations": [
-			"bradlc.vscode-tailwindcss"
+			"bradlc.vscode-tailwindcss",
+			"svelte.svelte-vscode"
 		]
 	}
 }

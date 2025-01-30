@@ -67,10 +67,10 @@
             m-1 p-2 hover:bg-shade
           ">
             <h2 class="font-bold">{post.data.title}</h2>
-            <address class="inline-block post-meta col-start-2 md:ml-3">
+            <address class="inline-block post-meta col-start-2 md:ml-3 whitespace-nowrap">
               {post.data.author}
             </address>
-            <div class="inline-block post-meta col-start-3 lg:ml-1">
+            <div class="inline-block post-meta col-start-3 lg:ml-1 whitespace-nowrap">
               <Time datetime={post.data.pubDate} />
             </div>
             <div class="col-span-3">{post.data.summary}</div>
