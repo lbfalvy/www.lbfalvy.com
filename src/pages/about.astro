@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import Main from "../layouts/Main.astro";
 
 ---
@@ -8,7 +9,8 @@ import Main from "../layouts/Main.astro";
 	description="Lawrence Bethlenfalvy, software engineer"
 >
 	<div class="max-w-[80ch] m-5">
-		<img src='https://github.com/lbfalvy.png'
+		<Image src='https://github.com/lbfalvy.png' loading="eager"
+			alt="My face" width="120" height="120"
 			class="rounded-full h-30 float-right m-3 [shape-outside:_ellipse()]" />
 		<p>
 			My name is Lawrence Bethlenfalvy, I make websites and web-based applications primarily

@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import Main from "../layouts/Main.astro";
+import { Image } from "astro:assets";
 
 const projects = await getCollection("projects");
 const projReady = await Promise.all(
@@ -14,9 +15,10 @@ const projReady = await Promise.all(
       projReady.map(([proj, Content]) => (
         <a href={proj.data.url}>
           <article class="emph-bg m-3 p-2 text-sm rounded-2xl">
-            {proj.data.image && <img
+            {proj.data.image && <Image
               src={proj.data.image}
               alt=""
+              loading="eager"
               width="100" height="60"
               class="object-center aspect-[16/9] w-full"
             />}
