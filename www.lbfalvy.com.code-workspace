@@ -18,5 +18,10 @@
 				"other": "off"
 			}
 		}
+	},
+	"extensions": {
+		"recommendations": [
+			"bradlc.vscode-tailwindcss"
+		]
 	}
 }

@@ -1,43 +1,60 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import Main from './Main.astro';
-import Time from '../components/Time.svelte';
-import { Image } from 'astro:assets';
-import patreonWordmark from "../icons/PATREON_WORDMARK_1_WHITE_RGB.svg"
+import type { CollectionEntry } from "astro:content";
+import Main from "./Main.astro";
+import Time from "../components/Time.svelte";
+import { Image } from "astro:assets";
+import patreonWordmark from "../icons/PATREON_WORDMARK_1_WHITE_RGB.svg";
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<"blog">["data"];
 
 const { title, author, summary, pubDate, updatedDate, image } = Astro.props;
 ---
+
 <Main title={title} description={summary} image={image}>
 	<article class="m-5 mt-3">
-		<header class="lg:grid grid-cols-[auto_auto_minmax(300px,_1fr)] grid-rows-[auto_auto]">
+		<header
+			class="lg:grid grid-cols-[auto_auto_minmax(300px,_1fr)] grid-rows-[auto_auto]"
+		>
 			<h2 class="font-bold row-span-2 text-2xl m-2 mt-3">{title}</h2>
 			<address class="post-meta inline-block col-start-2">{author}</address>
 			<Time client:load datetime={pubDate} />
-			<div class="italic tracking-[3px] text-emph-fg col-start-2 col-span-2 m-2 mt-0">{summary}</div>
-			{updatedDate && <div>Amended <Time datetime={updatedDate} /></div>}
+			<div
+				class="italic tracking-[3px] text-emph-fg col-start-2 col-span-2 m-2 mt-0"
+			>
+				{summary}
+			</div>
+			{
+				updatedDate && (
+					<div>
+						Amended <Time datetime={updatedDate} />
+					</div>
+				)
+			}
 		</header>
-		<hr class="mb-3">
+		<hr class="mb-3" />
 		<main class="max-w-[100ch] font-prose post-content">
 			<slot />
 		</main>
 		<footer class="mt-20">
 			<p class="post-meta">
-				Don't fund me if you have more important expenses.
-				I will spend all the extra free time on silly experiments.
-				<br>
-				<a href='https://ko-fi.com/D1D4AFWZX' target='_blank'>
-					<img class="inline-block border-0 h-[24px]"
-						src='https://storage.ko-fi.com/cdn/kofi1.png?v=6'
-						alt='Buy Me a Coffee at ko-fi.com' />
-				</a>
-				<a href="https://patreon.com/lbfalvy?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink">
-					<Image class="inline-block border-0 h-[16px] -mx-[200px]"
-						src={patreonWordmark}
-						alt="Support me on Patreon" />
-				</a>
+				I pledge to spend all the extra free time on silly experiments.
 			</p>
+			<a href="https://ko-fi.com/D1D4AFWZX" target="_blank">
+				<img
+					class="inline-block border-0 h-[24px]"
+					src="https://storage.ko-fi.com/cdn/kofi1.png?v=6"
+					alt="Buy Me a Coffee at ko-fi.com"
+				/>
+			</a>
+			<a
+				href="https://patreon.com/lbfalvy?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink"
+			>
+				<Image
+					class="inline-block border-0 h-[16px] w-[90px] object-cover ml-3"
+					src={patreonWordmark}
+					alt="Support me on Patreon"
+				/>
+			</a>
 		</footer>
 	</article>
 </Main>

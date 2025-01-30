@@ -1,10 +1,11 @@
 ---
 import { Image } from "astro:assets";
 import NavLink from "../components/NavLink.astro";
-import Layout from "../layouts/Html.astro"
+import Layout from "../layouts/Html.astro";
 import "../styles/global.css";
 import GhLogo from "../icons/github-mark-white.svg";
 import RssLogo from "../icons/rss.svg";
+import BskyLogo from "../icons/Bluesky_Logo.svg";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 
 interface Props {
@@ -18,40 +19,61 @@ const {
   description = SITE_DESCRIPTION,
   image,
 } = Astro.props;
-
 ---
 
 <Layout title={title} description={description} image={image}>
   <Fragment slot="head">
     <meta name="theme-color" content="#222" />
-    <link rel="icon" type="image/png" href="https://github.com/lbfalvy.png"/>
+    <link rel="icon" type="image/png" href="https://github.com/lbfalvy.png" />
   </Fragment>
-  <div class="
-    w-screen h-screen
+  <div
+    class="w-screen h-screen
     flex flex-col
     md:grid
-    md:grid-rows-[1fr_auto] md:grid-cols-[min-content_auto]
-  ">
-		<header class="
-      emph-bg whitespace-nowrap md:px-3 py-2 flex flex-col
-      text-right
-    ">
-			<h1 class="font-bold text-2xl m-2 mr-0 text-wrap lg:text-nowrap">Lawrence Bet…</h1>
-			<nav class="gutter
+    md:grid-rows-[1fr_auto] md:grid-cols-[min-content_auto]"
+  >
+    <header
+      class="emph-bg whitespace-nowrap md:px-3 py-2 flex flex-col
+      text-right"
+    >
+      <h1 class="font-bold text-2xl m-2 mr-0 text-wrap lg:text-nowrap">
+        Lawrence Bet…
+      </h1>
+      <nav
+        class="gutter
         flex md:flex-col
-        text-center md:text-right">
-				<NavLink href="/" zone="/blog">Blog</NavLink>
-				<NavLink href="/projects">Projects</NavLink>
-				<NavLink href="/about">About me</NavLink>
-				<NavLink href="/fortune">Fortune</NavLink>
-			</nav>
-		</header>
-    <main id="scroll-area" class="md:row-start-1 md:col-start-2 md:row-span-2 md:overflow-y-auto">
+        text-center md:text-right"
+      >
+        <NavLink href="/" zone="/blog">Blog</NavLink>
+        <NavLink href="/projects">Projects</NavLink>
+        <NavLink href="/about">About me</NavLink>
+        <NavLink href="/fortune">Fortune</NavLink>
+      </nav>
+    </header>
+    <main
+      id="scroll-area"
+      class="md:row-start-1 md:col-start-2 md:row-span-2 md:overflow-y-auto"
+    >
       <slot />
     </main>
     <footer class="md:row-start-2 emph-bg flex justify-center gap-3 py-3">
-      <a href="https://github.com/lbfalvy"><Image height="20" width="20" src={GhLogo} alt="Github"/></a>
-      <a href="/rss.xml"><Image height="20" width="20" src={RssLogo} alt="Rss"/></a>
+      <a href="https://github.com/lbfalvy">
+        <Image height="20" width="20" src={GhLogo} alt="Github" />
+      </a>
+      <a href="/rss.xml">
+        <Image height="20" width="20" src={RssLogo} alt="Rss" />
+      </a>
+      <a href="https://bsky.app/profile/lbfalvy.bsky.social">
+        <Image height="20" width="20" src={BskyLogo} alt="BlueSky" />
+      </a>
+      <a href="https://fosstodon.org/@lbfalvy">
+        <img
+          src="https://cdn.fosstodon.org/site_uploads/files/000/000/007/48/91cda647d1c18689.png"
+          alt="Fosstodon"
+          height="20"
+          width="20"
+        />
+      </a>
     </footer>
   </div>
 </Layout>
@@ -59,9 +81,9 @@ const {
 <script>
   const key = `scroll:${window.location.pathname}`;
   const scrollArea = document.getElementById("scroll-area");
-  scrollArea?.addEventListener('scrollend', () => {
-    sessionStorage.setItem(key, scrollArea.scrollTop.toString())
-  })
+  scrollArea?.addEventListener("scrollend", () => {
+    sessionStorage.setItem(key, scrollArea.scrollTop.toString());
+  });
   const savedPos = sessionStorage.getItem(key);
   if (savedPos) scrollArea!.scrollTop = Number.parseFloat(savedPos);
 </script>
