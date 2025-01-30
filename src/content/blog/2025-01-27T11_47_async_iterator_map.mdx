@@ -20,7 +20,7 @@ In synchronous rust, `Iterator::map` takes an `FnMut`, a function which can only
     fn map<B, F>(self, f: F) -> Map<Self, F> where F: FnMut(Self::Item) -> B;
   }
   ```
-  <p slot="label">source (modified): https://doc.rust-lang.org/src/core/iter/traits/iterator.rs.html#745</p>
+  <p slot="label">modified from the standard library</p>
 </Graphic>
 
 The async equivalent however has to take a function that returns some type that implements `Future` because that's how you statically type an asynchronous function, you parameterize on the state machine the compiler will eventually generate for its paused data. This is again perfectly normal, C++ coroutines do the same as I'm pretty sure every other language that supports any kind of stack-allocated coroutine has to. The problem emerges from lifetimes, because in order for that Future to hold onto a mutable reference, the async equivalent of map (which happens to be called `StreamExt::then` for reference) has to not only guarantee that the callback will not be running when its next called, but that its return value (the `Future` instance) will not exist (either because it's finished or because it's been freed) by the time the function is called again.
@@ -41,7 +41,7 @@ The async equivalent however has to take a function that returns some type that 
   <p slot="label">source (modified): https://docs.rs/futures-util/0.3.31/src/futures_util/stream/stream/mod.rs.html#488</p>
 </Graphic>
 
-The type of the callback then _should be_ **some function which for any lifetime `'a` returns some type is valid for the same lifetime `'a`**. The type of the return value is parametric! 
+The type of the callback then _should be_ **some function which for any lifetime `'a` returns some type that is valid for the same lifetime `'a`**. The type of the return value is parametric! 
 
 Since structs and functions can only be parametric on concrete types, not generics, a callback whose return type has a different contract depending on how you called the function is illegal on general. So if you want to access mutable data in an async stream, you have to make an ad-hoc `Mutex<&mut T>` right there on the stack which the closure and its return value can capture by shared reference and then immediately lock for its entire runtime. Streams are lazy and a new value will not be pulled until the current one is finished so this mutex can never ever be contested, but there is no way at all to explain this to the type system.
 
