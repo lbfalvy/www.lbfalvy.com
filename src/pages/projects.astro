@@ -1,7 +1,34 @@
 ---
+import { getCollection, render } from "astro:content";
 import Main from "../layouts/Main.astro";
+
+const projects = await getCollection("projects");
+const projReady = await Promise.all(
+  projects.map(async (proj) => [proj, (await render(proj)).Content] as const),
+);
 ---
 
 <Main>
-  work in progress
+  <div class="grid xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 max-w-[100ch]">
+    {
+      projReady.map(([proj, Content]) => (
+        <a href={proj.data.url}>
+          <article class="emph-bg m-3 p-2 text-sm rounded-2xl">
+            {proj.data.image && <img
+              src={proj.data.image}
+              alt={proj.data.hide_name ? proj.data.name : ""}
+              width="100" height="60"
+              class="object-center aspect-[16/9] w-full"
+            />}
+            <h2 class="font-bold text-xl italic">
+              {proj.data.name}
+            </h2>
+            <div>
+              <Content />
+            </div>
+          </article>
+        </a>
+      ))
+    }
+  </div>
 </Main>

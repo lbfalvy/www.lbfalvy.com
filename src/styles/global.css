@@ -80,6 +80,7 @@
   }
 }
 @theme {
+  --breakpoint-xs: 25rem;
   --tw-border-style: solid;
   --color-emph-bg: #181818;
   --color-side-bg: #333;

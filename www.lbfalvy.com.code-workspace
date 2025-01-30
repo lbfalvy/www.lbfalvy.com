@@ -12,6 +12,7 @@
 			"editor.wordWrap": "bounded",
 			"editor.wordWrapColumn": 80,
 			"editor.lineNumbers": "off",
+			"editor.rulers": [],
 			"editor.quickSuggestions": {
 				"comments": "off",
 				"strings": "off",
