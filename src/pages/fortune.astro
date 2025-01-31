@@ -1,0 +1,8 @@
+---
+import Main from "../layouts/Main.astro";
+import Fortune from "../components/Fortune";
+---
+
+<Main title="Fortune" description="Wisdom from Tux">
+  <Fortune client:only="react" />
+</Main>
